@@ -38,6 +38,9 @@ public class Main {
             boolean isFound = false;
             while(!q.isEmpty()) {
                 int[] position = q.poll();
+                if(position[2] >= nextFish[2]) {
+                    continue;
+                }
                 for (int i = 0; i < 4; i++) {
                     int nx = dx[i] + position[0];
                     int ny = dy[i] + position[1];
