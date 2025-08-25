@@ -3,7 +3,7 @@ import java.io.*;
 
 public class Main {
     static int N;
-    static int answer, oneCount = 0, twoCount = 0, totalPopulation = 0;
+    static int answer, totalPopulation = 0;
     static List<Integer>[] lists;
     static int[] team, population;
     static boolean[] visited;
@@ -47,14 +47,10 @@ public class Main {
         }
 
         team[depth] = 1;
-        oneCount++;
         combination(depth + 1);
-        oneCount--;
 
         team[depth] = 2;
-        twoCount++;
         combination(depth + 1);
-        twoCount--;
     }
 
     static void isValid() {
