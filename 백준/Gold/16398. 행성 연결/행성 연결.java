@@ -1,83 +1,52 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int[] ranking, nodes;
-    static long answer = 0;
-    static boolean union(Edge e) {
-        int a = e.from;
-        int b = e.to;
-        int pa = find(a);
-        int pb = find(b);
-        if (pa == pb) {
-            return false;
-        }
-
-        if (ranking[pa] > ranking[pb]) {
-            nodes[pb] = pa;
-        } else if (ranking[pb] > ranking[pa]) {
-            nodes[pa] = pb;
-        } else {
-            nodes[pb] = pa;
-            ranking[pa]++;
-        }
-        answer += e.weight;
-        return true;
-    }
-
-    static int find(int node) {
-        if (nodes[node] == node) {
-            return node;
-        }
-
-        int p = find(nodes[node]);
-        nodes[node] = p;
-        return p;
-    }
-
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        nodes = new int[N];
-        ranking = new int[N];
-        int E = 0;
-        for (int i = 0; i < N; i++) {
-            nodes[i] = i;
-        }
 
-        PriorityQueue<Edge> edges = new PriorityQueue<>();
+        // 인접행렬 입력
+        int[][] w = new int[N][N];
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
-                int weight = Integer.parseInt(st.nextToken());
-                if(i >= j) continue;
-                edges.add(new Edge(weight, i, j));
+                w[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        while (!edges.isEmpty()) {
-            if (E == N - 1) {
-                break;
+        boolean[] visited = new boolean[N];
+        int[] dist = new int[N];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[0] = 0;
+
+        long answer = 0;
+        for (int iter = 0; iter < N; iter++) {
+            int u = -1, best = Integer.MAX_VALUE;
+            // 아직 미방문 정점 중 dist 최소 찾기 (O(N))
+            for (int i = 0; i < N; i++) {
+                if (!visited[i] && dist[i] < best) {
+                    best = dist[i];
+                    u = i;
+                }
+            }
+            // 연결 안 된 경우 처리(필요 시)
+            if (u == -1) {
+                // System.out.println("Disconnected");
+                return;
             }
 
-            if(union(edges.poll())) {
-                E++;
+            visited[u] = true;
+            answer += (iter == 0 ? 0 : best);
+
+            // u를 통해 다른 정점까지의 거리 갱신 (O(N))
+            for (int v = 0; v < N; v++) {
+                if (!visited[v] && w[u][v] < dist[v]) {
+                    dist[v] = w[u][v];
+                }
             }
         }
+
         System.out.println(answer);
-    }
-
-    static class Edge implements Comparable<Edge> {
-        int weight, from, to;
-        Edge(int weight, int from, int to) {
-            this.weight = weight;
-            this.from = from;
-            this.to = to;
-        }
-
-        @Override
-        public int compareTo(Edge o) {
-            return Integer.compare(this.weight, o.weight);
-        }
     }
 }
