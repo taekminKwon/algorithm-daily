@@ -71,7 +71,7 @@ class Main {
             }
 
             for (Edge destination : lists.get(from.dest)) {
-                int destMinWeight = Math.min(destination.weight, distances[from.dest][destination.dest]);
+                int destMinWeight = destination.weight;
                 if (distance[destination.dest] > from.weight + destMinWeight) {
                     distance[destination.dest] = from.weight + destMinWeight;
                     pq.add(new Edge(destination.dest, distance[destination.dest]));
