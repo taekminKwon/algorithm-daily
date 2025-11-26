@@ -1,59 +1,62 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    static int[] numbers, operators;
-    static int N, maxValue, minValue;
-    public static void main(String[] args) throws IOException {
+    static int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE, N, sum = 0;
+    static int[] numbers, operator;
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        maxValue = Integer.MIN_VALUE;
-        minValue = Integer.MAX_VALUE;
         N = Integer.parseInt(br.readLine());
-        numbers = new int[N];
         StringTokenizer st = new StringTokenizer(br.readLine());
+        numbers = new int[N];
         for (int i = 0; i < N; i++) {
             numbers[i] = Integer.parseInt(st.nextToken());
         }
 
-        operators = new int[4];
+        operator = new int[4];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < 4; i++) {
-            operators[i] = Integer.parseInt(st.nextToken());
-        }
 
-        dfs(0, numbers[0]);
-        sb.append(maxValue).append('\n').append(minValue);
+        for (int i = 0; i < 4; i++) {
+            operator[i] = Integer.parseInt(st.nextToken());
+        }
+        sum = numbers[0];
+        dfs(0);
+        sb.append(max).append("\n").append(min);
         System.out.println(sb);
-        br.close();
     }
 
-    static void dfs(int depth, int result) {
+    static void dfs(int depth) {
         if(depth == N - 1) {
-            maxValue = Math.max(result, maxValue);
-            minValue = Math.min(result, minValue);
+            max = Math.max(max, sum);
+            min = Math.min(min, sum);
             return;
         }
 
         for (int i = 0; i < 4; i++) {
-            if(operators[i] > 0) {
-                operators[i] -= 1;
-                dfs(depth + 1, calculate(result, numbers[depth + 1], i));
-                operators[i] += 1;
+            if(operator[i] > 0) {
+                int result = calculate(i, sum, numbers[depth + 1]);
+                int temp = sum;
+                sum = result;
+                operator[i]--;
+                dfs(depth + 1);
+                sum = temp;
+                operator[i]++;
             }
         }
     }
 
-    static int calculate(int i, int j, int operator) {
-        switch(operator) {
+    static int calculate(int operator, int a, int b) {
+        switch (operator) {
             case 0:
-                return i + j;
+                return a + b;
             case 1:
-                return i - j;
+                return a - b;
             case 2:
-                return i * j;
+                return a * b;
             default:
-                return i / j;
+                return a / b;
         }
     }
 }
