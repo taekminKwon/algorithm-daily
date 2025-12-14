@@ -1,0 +1,23 @@
+SELECT
+    U.SALES_DATE,
+    U.PRODUCT_ID,
+    U.USER_ID,
+    U.SALES_AMOUNT
+FROM
+    (
+        SELECT 
+            PRODUCT_ID,
+            USER_ID,
+            DATE_FORMAT(SALES_DATE, '%Y-%m-%d') AS SALES_DATE,
+            SALES_AMOUNT
+        FROM ONLINE_SALE
+        UNION ALL
+        SELECT 
+            PRODUCT_ID,
+            NULL AS USER_ID,
+            DATE_FORMAT(SALES_DATE, '%Y-%m-%d') AS SALES_DATE,
+            SALES_AMOUNT
+        FROM OFFLINE_SALE
+    ) AS U
+WHERE SALES_DATE LIKE '2022-03%'
+ORDER BY SALES_DATE, PRODUCT_ID, USER_ID
