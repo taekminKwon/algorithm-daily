@@ -43,17 +43,23 @@ public class Main {
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             int index = Integer.parseInt(st.nextToken());
-            int gold = Integer.parseInt(st.nextToken());;
-            int silver = Integer.parseInt(st.nextToken());;
-            int bronze = Integer.parseInt(st.nextToken());;
+            int gold = Integer.parseInt(st.nextToken());
+            int silver = Integer.parseInt(st.nextToken());
+            int bronze = Integer.parseInt(st.nextToken());
             pq.add(new Nation(index, gold, silver, bronze));
         }
         List<Nation> list = new ArrayList<>();
 
+        int grade = 0;
+        int common = 1;
         while(!pq.isEmpty()) {
             Nation nation = pq.poll();
             if (list.isEmpty() || !list.get(list.size() - 1).equals(nation)) {
                 list.add(nation);
+                grade += common;
+                common = 1;
+            } else {
+                common++;
             }
 
             if (nation.index == K) {
@@ -61,6 +67,6 @@ public class Main {
             }
         }
 
-        System.out.println(list.size());
+        System.out.println(grade);
     }
 }
