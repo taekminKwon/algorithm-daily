@@ -2,25 +2,43 @@ import java.util.*;
 
 class Solution {
     public List<Integer> solution(int[] progresses, int[] speeds) {
-        int[] completion = new int[progresses.length];
-        for (int i = 0; i < progresses.length; i++) {
-            completion[i] = (100 - progresses[i]) % speeds[i] == 0 ? 
-                (100 - progresses[i]) / speeds[i] :
-                (100 - progresses[i]) / speeds[i] + 1;
+        Queue<Integer> q = new LinkedList<>(Arrays.asList());
+        
+        int length = progresses.length;
+        
+        for (int i = 0; i < length; i++) {
+            q.add(i);
         }
+        
+        int nextProgress = 0;
+        
         List<Integer> answer = new ArrayList<>();
-        int high = completion[0];
-        int day = 0;
-        for (int i = 0; i < completion.length; i++) {
-            if (completion[i] <= high) {
-                day++;
-                continue;
+        int progressDone = 0;
+        
+        while (progressDone < length) {
+            // 미완료 작업
+            int next = q.peek();
+            
+            // 오늘 작업 진척
+            for (int i = next; i < length; i++) {
+                if (i < length) {
+                    progresses[i] += speeds[i];
+                }
             }
-            answer.add(day);
-            high = completion[i];
-            day = 1;
+            
+            // 오늘 배포된 작업
+            int done = 0;
+            
+            while(!q.isEmpty() && progresses[q.peek()] >= 100) {
+                q.poll();
+                done++;
+            }
+            
+            if (done > 0) {
+                answer.add(done);
+                progressDone += done;
+            }
         }
-        answer.add(day);
         
         return answer;
     }
