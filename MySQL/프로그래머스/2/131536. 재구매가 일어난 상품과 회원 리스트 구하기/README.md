@@ -1,10 +1,10 @@
 # [level 2] 재구매가 일어난 상품과 회원 리스트 구하기 - 131536 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131536?language=mysql) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131536) 
 
 ### 성능 요약
 
-메모리: 0.0 MB, 시간: 0.00 ms
+메모리: undefined, 시간: 
 
 ### 구분
 
@@ -12,11 +12,11 @@
 
 ### 채점결과
 
-Empty
+합계: 100.0 / 100.0
 
 ### 제출 일자
 
-2025년 12월 14일 18:39:39
+2026년 09월 24일 17:41:17
 
 ### 문제 설명
 
