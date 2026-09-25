@@ -1,6 +1,6 @@
 # [level 3] 대장균들의 자식의 수 구하기 - 299305 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/299305?language=mysql) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/299305) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 12월 16일 16:13:24
+2026년 09월 25일 23:17:41
 
 ### 문제 설명
 
