@@ -1,57 +1,48 @@
 import java.util.*;
 
-class Process implements Comparable<Process> {
-    int index;
-    int priority;
-    int count;
-    Process (int index, int priority) {
-        this.index = index;
-        this.priority = priority;
-        count = 0;
-    }
-    
-    Process reProcessing() {
-        this.count++;
-        return this;
-    }
-    
-    public int compareTo (Process p) {
-        if (this.priority == p.priority) {
-            if (this.count != p.count) {
-                return Integer.compare(this.count, p.count);
-            }
-            
-            return Integer.compare(this.index, p.index);
-        }
-        return Integer.compare(p.priority, this.priority);
-    }
-}
 class Solution {
     public int solution(int[] priorities, int location) {
-        PriorityQueue<Process> pq = new PriorityQueue<>();
+        Map<Integer, Integer> counts = new HashMap<>();
+        boolean[] visited = new boolean[priorities.length];
         for (int i = 0; i < priorities.length; i++) {
-            pq.add(new Process(i, priorities[i]));
+            counts.put(priorities[i], counts.getOrDefault(priorities[i], 0) + 1);
         }
-    
-        int index = -1;
-        int priority = 9;
-        int answer = 0;
-        while (!pq.isEmpty()) {
-            Process curr = pq.poll();
-            if (curr.count == 0 && priority > curr.priority && curr.index < index) {
-                pq.add(curr.reProcessing());
+
+        List<Integer> list = new ArrayList<>(counts.keySet());
+        list.sort(Collections.reverseOrder());
+        Queue<Integer> queue = new LinkedList<>();
+        
+        int index = 0;
+        int listIndex = 0;
+        int count = 0;
+        
+        while (queue.size() < priorities.length) {
+            index %= priorities.length;
+            
+            int priority = list.get(listIndex);
+            
+            if (visited[index] || priority > priorities[index]) {
+                index++;
                 continue;
             }
             
-            index = curr.index;
-            priority = curr.priority;
-            answer++;
-            
-            if (curr.index == location) {
-                break;
+            visited[index] = true;
+            queue.add(index++);
+            counts.put(priority, counts.get(priority) - 1);
+            if (counts.get(priority) == 0) {
+                listIndex++;
             }
         }
         
-        return answer;
+        index = 0;
+        while(!queue.isEmpty()) {
+            int next = queue.poll();
+            if (next == location) {
+                return index + 1;
+            }
+            index++;
+        }
+        
+        return -1;
     }
 }
