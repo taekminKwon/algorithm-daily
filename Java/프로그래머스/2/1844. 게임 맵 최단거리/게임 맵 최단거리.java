@@ -1,13 +1,14 @@
 import java.util.*;
 
 class Solution {
-    static int[] dx = {1, -1, 0, 0};
-    static int[] dy = {0, 0, 1, -1};
     public int solution(int[][] maps) {
         int answer = 0;
         int n = maps.length;
         int m = maps[0].length;
+        int[] dx = {1, -1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
         boolean[][] visited = new boolean[n][m];
+        
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[]{0, 0, 1});
         visited[0][0] = true;
@@ -19,11 +20,10 @@ class Solution {
             }
             
             for (int i = 0; i < 4; i++) {
-                int nx = next[0] + dx[i];
-                int ny = next[1] + dy[i];
+                int nx = dx[i] + next[0];
+                int ny = dy[i] + next[1];
                 
-                if (nx < 0 || nx >= n || ny < 0 || ny >= m ||
-                    maps[nx][ny] == 0 || visited[nx][ny]) {
+                if (nx < 0 || nx >= n || ny < 0 || ny >= m || visited[nx][ny] || maps[nx][ny] == 0) {
                     continue;
                 }
                 
