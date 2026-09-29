@@ -1,22 +1,17 @@
 class Solution {
-    static int targetNumber, count = 0;
-    static int[] staticNumbers;
-    
-    public void dfs(int depth, int total) {
-        if (depth == staticNumbers.length) {
-            if (total == targetNumber)
-                count++;
-            return;
-        }
-
-        dfs(depth + 1, total + staticNumbers[depth]);
-        dfs(depth + 1, total + staticNumbers[depth] * -1);
+    public int solution(int[] numbers, int target) {
+        return dfs(0, 0, numbers, target);
     }
     
-    public int solution(int[] numbers, int target) {
-        staticNumbers = numbers;
-        targetNumber = target;
-        dfs(0, 0);
-        return count;
+    public int dfs(int total, int depth, int[] numbers, int target) {
+        if (depth == numbers.length) {
+            if (target == total) {
+                return 1;
+            }
+            
+            return 0;
+        }
+        
+        return dfs(total + numbers[depth], depth + 1, numbers, target) + dfs(total - numbers[depth], depth + 1, numbers, target);
     }
 }
