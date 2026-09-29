@@ -1,18 +1,25 @@
 import java.util.*;
+
 class Solution {
     static int[] parent;
     static int[] ranking;
+    
     public int solution(int n, int[][] costs) {
+        int answer = 0;
         parent = new int[n];
         ranking = new int[n];
-        Arrays.setAll(parent, i -> i);
         PriorityQueue<Edge> pq = new PriorityQueue<>();
-        Arrays.stream(costs).forEach(cost -> pq.add(new Edge(cost[0], cost[1], cost[2])));
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
         
-        int answer = 0;
+        for (int[] cost : costs) {
+            pq.add(new Edge(cost[0], cost[1], cost[2]));
+        }
+        
         while(!pq.isEmpty()) {
             Edge e = pq.poll();
-            if(union(e)) {
+            if (union(e)) {
                 answer += e.weight;
             }
         }
@@ -20,41 +27,47 @@ class Solution {
         return answer;
     }
     
-    int find(int self) {
-        if (parent[self] == self) {
-            return self;
+    public boolean union(Edge e) {
+        int a = find(e.from);
+        int b = find(e.to);
+        
+        if (a == b) {
+            return false;
         }
         
-        return find(parent[self]);
-    }
-    
-    boolean union(Edge e) {
-        int e1 = find(e.from);
-        int e2 = find(e.to);
-        if (e1 != e2) {
-            if (ranking[e1]++ >= ranking[e2]) {
-                parent[e2] = e1;
-            } else {
-                ranking[e2]++;
-                parent[e1] = e2;
-            }
-            return true;
+        if (ranking[a] > ranking[b]) {
+            parent[b] = a;
+        } else if (ranking[b] > ranking[a]) {
+            parent[a] = b;
+        } else {
+            ranking[a]++;
+            parent[b] = a;
         }
-        return false;
+        
+        return true;
     }
     
-    static class Edge implements Comparable<Edge> {
+    public int find(int i) {
+        if (i != parent[i]) {
+            parent[i] = find(parent[i]);
+        }
+        
+        return parent[i];
+    }
+    
+    public class Edge implements Comparable<Edge> {
         int from;
         int to;
         int weight;
-        public int compareTo (Edge e1) {
-            return Integer.compare(weight, e1.weight);
-        }
         
         Edge (int from, int to, int weight) {
             this.from = from;
             this.to = to;
             this.weight = weight;
+        }
+        
+        public int compareTo(Edge e) {
+            return Integer.compare(weight, e.weight);
         }
     }
 }
