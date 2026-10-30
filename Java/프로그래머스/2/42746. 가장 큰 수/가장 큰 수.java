@@ -1,18 +1,29 @@
 import java.util.*;
+
 class Solution {
     public String solution(int[] numbers) {
-        String[] strNumbers = new String[numbers.length];
-        for (int i = 0; i < numbers.length; i++) {
-            strNumbers[i] = String.valueOf(numbers[i]);
+        List<Integer> list = new ArrayList<>();
+        
+        for (int number : numbers) {
+            list.add(number);
         }
         
-        Arrays.sort(strNumbers, (o1, o2) -> {
-            return (o2 + o1).compareTo(o1 + o2);
+        list.sort((a, b) -> {
+            return Integer.parseInt(b + "" + a) - Integer.parseInt(a + "" + b);
         });
         
-        if (strNumbers[0].equals("0")) {
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i : list) {
+            sb.append(i);
+        }
+        
+        String answer = sb.toString();
+        
+        if (answer.charAt(0) == '0') {
             return "0";
         }
-        return String.join("", strNumbers);
+        
+        return answer;
     }
 }
