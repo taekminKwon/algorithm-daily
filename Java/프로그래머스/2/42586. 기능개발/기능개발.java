@@ -1,45 +1,32 @@
 import java.util.*;
 
 class Solution {
-    public List<Integer> solution(int[] progresses, int[] speeds) {
-        Queue<Integer> q = new LinkedList<>(Arrays.asList());
-        
-        int length = progresses.length;
-        
-        for (int i = 0; i < length; i++) {
-            q.add(i);
+    public int[] solution(int[] progresses, int[] speeds) {
+        int[] days = new int[progresses.length];
+        for (int i = 0; i < progresses.length; i++) {
+            days[i] = (100 - progresses[i]) % speeds[i] == 0 
+                ? (100 - progresses[i]) / speeds[i] : (100 - progresses[i]) / speeds[i] + 1;
         }
         
-        int nextProgress = 0;
+        Queue<Integer> queue = new LinkedList<>();
+        List<Integer> completed = new ArrayList<>();
+        queue.add(days[0]);
         
-        List<Integer> answer = new ArrayList<>();
-        int progressDone = 0;
-        
-        while (progressDone < length) {
-            // 미완료 작업
-            int next = q.peek();
-            
-            // 오늘 작업 진척
-            for (int i = next; i < length; i++) {
-                if (i < length) {
-                    progresses[i] += speeds[i];
-                }
+        for (int i = 1; i < days.length; i++) {
+            if (!queue.isEmpty() && queue.peek() >= days[i]) {
+                queue.add(days[i]);
+                continue;
             }
             
-            // 오늘 배포된 작업
-            int done = 0;
-            
-            while(!q.isEmpty() && progresses[q.peek()] >= 100) {
-                q.poll();
-                done++;
-            }
-            
-            if (done > 0) {
-                answer.add(done);
-                progressDone += done;
-            }
+            completed.add(queue.size());
+            queue.clear();
+            queue.add(days[i]);
         }
         
-        return answer;
+        if (!queue.isEmpty()) {
+            completed.add(queue.size());
+        }
+        
+        return completed.stream().mapToInt(i -> i).toArray();
     }
 }
